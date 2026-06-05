@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Kemacetan Lalu Lintas</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background-color:#f4f4f4;
+            margin:0;
+            padding:0;
+            line-height:1.6;
+        }
+
+        header{
+            background:#0d6efd;
+            color:white;
+            text-align:center;
+            padding:20px;
+        }
+
+        .container{
+            width:85%;
+            margin:auto;
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:25px;
+            border-radius:10px;
+            margin-bottom:20px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#0d6efd;
+        }
+
+        img{
+            width:100%;
+            max-width:800px;
+            display:block;
+            margin:auto;
+            border-radius:10px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:15px;
+        }
+
+        table, th, td{
+            border:1px solid #ddd;
+        }
+
+        th{
+            background:#0d6efd;
+            color:white;
+        }
+
+        th, td{
+            padding:10px;
+            text-align:center;
+        }
+
+        footer{
+            background:#222;
+            color:white;
+            text-align:center;
+            padding:15px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Analisis Kemacetan Lalu Lintas</h1>
+    <p>Berdasarkan Jumlah Kendaraan per Jam</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Flowchart Sistem</h2>
+
+        <!-- Ganti nama file sesuai gambar yang kamu simpan -->
+        <img src="flowchart.jpg" alt="Flowchart Analisis Kemacetan">
+    </div>
+
+    <div class="card">
+        <h2>Deskripsi Sistem</h2>
+
+        <p>
+            Sistem ini digunakan untuk menganalisis tingkat kemacetan lalu lintas
+            berdasarkan jumlah kendaraan yang melintas pada setiap jam pengamatan.
+            Data yang dimasukkan berupa jam dan jumlah kendaraan, kemudian
+            diolah menggunakan DataFrame untuk menghasilkan informasi yang
+            lebih mudah dipahami.
+        </p>
+
+        <p>
+            Setiap data jumlah kendaraan akan diklasifikasikan ke dalam tiga
+            kategori kondisi lalu lintas, yaitu:
+        </p>
+
+        <ul>
+            <li><b>Lancar</b> : jumlah kendaraan kurang dari 50.</li>
+            <li><b>Padat</b> : jumlah kendaraan antara 50 sampai 100.</li>
+            <li><b>Macet</b> : jumlah kendaraan lebih dari 100.</li>
+        </ul>
+
+        <p>
+            Setelah proses klasifikasi selesai, sistem akan menentukan jumlah
+            kendaraan maksimum dan jam paling macet. Selanjutnya data
+            divisualisasikan dalam bentuk grafik serta ditampilkan dalam bentuk
+            tabel dan kesimpulan.
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Contoh Hasil Analisis</h2>
+
+        <table>
+            <tr>
+                <th>Jam</th>
+                <th>Jumlah Kendaraan</th>
+                <th>Status</th>
+            </tr>
+
+            <tr>
+                <td>06:00</td>
+                <td>35</td>
+                <td>Lancar</td>
+            </tr>
+
+            <tr>
+                <td>07:00</td>
+                <td>120</td>
+                <td>Macet</td>
+            </tr>
+
+            <tr>
+                <td>08:00</td>
+                <td>200</td>
+                <td>Macet</td>
+            </tr>
+
+            <tr>
+                <td>09:00</td>
+                <td>90</td>
+                <td>Padat</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Kesimpulan</h2>
+
+        <p><b>Jam paling macet:</b> 08:00</p>
+        <p><b>Jumlah kendaraan maksimum:</b> 200 kendaraan</p>
+
+        <p>
+            Berdasarkan hasil analisis, kepadatan lalu lintas tertinggi terjadi
+            pada pukul 08.00 dengan jumlah kendaraan sebanyak 200 kendaraan.
+            Kondisi tersebut termasuk kategori macet karena jumlah kendaraan
+            melebihi 100 kendaraan.
+        </p>
+    </div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Analisis Kemacetan Lalu Lintas</p>
+</footer>
+
+</body>
+</html>
