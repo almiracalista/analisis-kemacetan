@@ -6,8 +6,7 @@
 
 <title>Monitoring Kemacetan Indonesia</title>
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
 
@@ -15,7 +14,7 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Segoe UI, sans-serif;
+    font-family:Arial, sans-serif;
 }
 
 body{
@@ -39,19 +38,257 @@ header{
     background:white;
     padding:20px;
     overflow-y:auto;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
 }
 
 .card{
     background:#f8f9fa;
-    padding:15px;
     border-radius:10px;
+    padding:15px;
     margin-bottom:15px;
 }
 
 .card h3{
     margin-bottom:10px;
+    color:#0077cc;
 }
 
 button{
-    width:100
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#0077cc;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#005fa3;
+}
+
+#map{
+    flex:1;
+}
+
+.status{
+    font-size:24px;
+    font-weight:bold;
+    text-align:center;
+    margin-top:10px;
+}
+
+.macet{
+    color:red;
+}
+
+.padat{
+    color:orange;
+}
+
+.lancar{
+    color:green;
+}
+
+.info p{
+    margin:8px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚦 Monitoring Kemacetan Indonesia</h1>
+    <p>Sistem Pemantauan Lalu Lintas Berbasis Lokasi</p>
+</header>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div class="card">
+    <h3>Status Lalu Lintas</h3>
+
+    <div id="status" class="status">
+        Menunggu Data...
+    </div>
+
+    <p id="kecepatan" style="text-align:center;margin-top:10px;">
+        Kecepatan: -
+    </p>
+</div>
+
+<div class="card">
+    <h3>Lokasi Pengguna</h3>
+
+    <div class="info">
+
+        <p><b>Latitude:</b></p>
+        <p id="lat">-</p>
+
+        <p><b>Longitude:</b></p>
+        <p id="lng">-</p>
+
+    </div>
+</div>
+
+<div class="card">
+    <h3>Keterangan</h3>
+
+    <p>🟢 Lancar = > 40 km/jam</p>
+    <p>🟠 Padat = 20 - 40 km/jam</p>
+    <p>🔴 Macet = < 20 km/jam</p>
+
+</div>
+
+<button onclick="deteksiLokasi()">
+📍 Mulai Monitoring
+</button>
+
+</div>
+
+<div id="map"></div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+const map = L.map('map').setView(
+[-2.5489,118.0149],
+5
+);
+
+L.tileLayer(
+'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+    maxZoom:19,
+    attribution:'© OpenStreetMap'
+}
+).addTo(map);
+
+let marker;
+let watchId;
+
+function deteksiLokasi(){
+
+    if(!navigator.geolocation){
+
+        alert("Browser tidak mendukung GPS");
+        return;
+
+    }
+
+    if(watchId){
+        navigator.geolocation.clearWatch(watchId);
+    }
+
+    watchId =
+    navigator.geolocation.watchPosition(
+
+        function(pos){
+
+            const lat =
+            pos.coords.latitude;
+
+            const lng =
+            pos.coords.longitude;
+
+            let speed =
+            pos.coords.speed;
+
+            if(speed === null){
+                speed = 0;
+            }
+
+            speed =
+            speed * 3.6;
+
+            document.getElementById("lat")
+            .innerHTML =
+            lat.toFixed(6);
+
+            document.getElementById("lng")
+            .innerHTML =
+            lng.toFixed(6);
+
+            document.getElementById("kecepatan")
+            .innerHTML =
+            "Kecepatan: " +
+            speed.toFixed(1) +
+            " km/jam";
+
+            let statusText = "";
+            let statusClass = "";
+
+            if(speed < 20){
+
+                statusText = "🔴 MACET";
+                statusClass = "macet";
+
+            }
+            else if(speed < 40){
+
+                statusText = "🟠 PADAT";
+                statusClass = "padat";
+
+            }
+            else{
+
+                statusText = "🟢 LANCAR";
+                statusClass = "lancar";
+
+            }
+
+            const statusEl =
+            document.getElementById("status");
+
+            statusEl.innerHTML =
+            statusText;
+
+            statusEl.className =
+            "status " + statusClass;
+
+            map.setView(
+            [lat,lng],
+            16
+            );
+
+            if(marker){
+                map.removeLayer(marker);
+            }
+
+            marker =
+            L.marker([lat,lng])
+            .addTo(map)
+            .bindPopup(statusText)
+            .openPopup();
+
+        },
+
+        function(error){
+
+            alert(
+            "Lokasi tidak dapat diakses. Pastikan GPS dan izin lokasi aktif."
+            );
+
+        },
+
+        {
+            enableHighAccuracy:true,
+            maximumAge:0,
+            timeout:10000
+        }
+
+    );
+
+}
+
+</script>
+
+</body>
+</html>
