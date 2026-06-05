@@ -1,181 +1,233 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analisis Kemacetan Lalu Lintas</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            background-color:#f4f4f4;
-            margin:0;
-            padding:0;
-            line-height:1.6;
-        }
+<title>Monitoring Kemacetan Indonesia</title>
 
-        header{
-            background:#0d6efd;
-            color:white;
-            text-align:center;
-            padding:20px;
-        }
+<style>
 
-        .container{
-            width:85%;
-            margin:auto;
-            padding:20px;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, sans-serif;
+}
 
-        .card{
-            background:white;
-            padding:25px;
-            border-radius:10px;
-            margin-bottom:20px;
-            box-shadow:0 2px 8px rgba(0,0,0,0.1);
-        }
+body{
+    background:#f4f6f9;
+}
 
-        h2{
-            color:#0d6efd;
-        }
+header{
+    background:#0d6efd;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
 
-        img{
-            width:100%;
-            max-width:800px;
-            display:block;
-            margin:auto;
-            border-radius:10px;
-        }
+.container{
+    display:flex;
+    flex-wrap:wrap;
+}
 
-        table{
-            width:100%;
-            border-collapse:collapse;
-            margin-top:15px;
-        }
+.sidebar{
+    width:320px;
+    background:white;
+    padding:20px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
 
-        table, th, td{
-            border:1px solid #ddd;
-        }
+.card{
+    background:#f8f9fa;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
+}
 
-        th{
-            background:#0d6efd;
-            color:white;
-        }
+.card h3{
+    margin-bottom:10px;
+}
 
-        th, td{
-            padding:10px;
-            text-align:center;
-        }
+.status{
+    font-size:24px;
+    font-weight:bold;
+    color:red;
+}
 
-        footer{
-            background:#222;
-            color:white;
-            text-align:center;
-            padding:15px;
-        }
-    </style>
+#map{
+    flex:1;
+    height:90vh;
+}
+
+.info{
+    margin-top:10px;
+    line-height:1.8;
+}
+
+.btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#0d6efd;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.btn:hover{
+    background:#0b5ed7;
+}
+
+</style>
 </head>
+
 <body>
 
 <header>
-    <h1>Analisis Kemacetan Lalu Lintas</h1>
-    <p>Berdasarkan Jumlah Kendaraan per Jam</p>
+    <h1>🚦 Monitoring Kemacetan Indonesia</h1>
+    <p>Google Maps Traffic Layer Realtime</p>
 </header>
 
 <div class="container">
 
-    <div class="card">
-        <h2>Flowchart Sistem</h2>
+<div class="sidebar">
 
-        <!-- Ganti nama file sesuai gambar yang kamu simpan -->
-        <img src="flowchart.jpg" alt="Flowchart Analisis Kemacetan">
-    </div>
+<div class="card">
+<h3>Status Sistem</h3>
 
-    <div class="card">
-        <h2>Deskripsi Sistem</h2>
-
-        <p>
-            Sistem ini digunakan untuk menganalisis tingkat kemacetan lalu lintas
-            berdasarkan jumlah kendaraan yang melintas pada setiap jam pengamatan.
-            Data yang dimasukkan berupa jam dan jumlah kendaraan, kemudian
-            diolah menggunakan DataFrame untuk menghasilkan informasi yang
-            lebih mudah dipahami.
-        </p>
-
-        <p>
-            Setiap data jumlah kendaraan akan diklasifikasikan ke dalam tiga
-            kategori kondisi lalu lintas, yaitu:
-        </p>
-
-        <ul>
-            <li><b>Lancar</b> : jumlah kendaraan kurang dari 50.</li>
-            <li><b>Padat</b> : jumlah kendaraan antara 50 sampai 100.</li>
-            <li><b>Macet</b> : jumlah kendaraan lebih dari 100.</li>
-        </ul>
-
-        <p>
-            Setelah proses klasifikasi selesai, sistem akan menentukan jumlah
-            kendaraan maksimum dan jam paling macet. Selanjutnya data
-            divisualisasikan dalam bentuk grafik serta ditampilkan dalam bentuk
-            tabel dan kesimpulan.
-        </p>
-    </div>
-
-    <div class="card">
-        <h2>Contoh Hasil Analisis</h2>
-
-        <table>
-            <tr>
-                <th>Jam</th>
-                <th>Jumlah Kendaraan</th>
-                <th>Status</th>
-            </tr>
-
-            <tr>
-                <td>06:00</td>
-                <td>35</td>
-                <td>Lancar</td>
-            </tr>
-
-            <tr>
-                <td>07:00</td>
-                <td>120</td>
-                <td>Macet</td>
-            </tr>
-
-            <tr>
-                <td>08:00</td>
-                <td>200</td>
-                <td>Macet</td>
-            </tr>
-
-            <tr>
-                <td>09:00</td>
-                <td>90</td>
-                <td>Padat</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="card">
-        <h2>Kesimpulan</h2>
-
-        <p><b>Jam paling macet:</b> 08:00</p>
-        <p><b>Jumlah kendaraan maksimum:</b> 200 kendaraan</p>
-
-        <p>
-            Berdasarkan hasil analisis, kepadatan lalu lintas tertinggi terjadi
-            pada pukul 08.00 dengan jumlah kendaraan sebanyak 200 kendaraan.
-            Kondisi tersebut termasuk kategori macet karena jumlah kendaraan
-            melebihi 100 kendaraan.
-        </p>
-    </div>
+<p>Status:</p>
+<div class="status">AKTIF</div>
 
 </div>
 
-<footer>
-    <p>&copy; 2026 Analisis Kemacetan Lalu Lintas</p>
-</footer>
+<div class="card">
+
+<h3>Lokasi Pengguna</h3>
+
+<div class="info">
+
+<p><b>Latitude:</b></p>
+<p id="lat">-</p>
+
+<p><b>Longitude:</b></p>
+<p id="lng">-</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Informasi Lalu Lintas</h3>
+
+<p>
+Warna pada peta:
+</p>
+
+<br>
+
+<p>🟢 Lancar</p>
+<p>🟠 Padat</p>
+<p>🔴 Macet</p>
+<p>🔴🔴 Sangat Macet</p>
+
+</div>
+
+<button class="btn" onclick="cariLokasi()">
+📍 Deteksi Lokasi Saya
+</button>
+
+</div>
+
+<div id="map"></div>
+
+</div>
+
+<script>
+
+let map;
+let marker;
+
+function initMap(){
+
+    map = new google.maps.Map(
+        document.getElementById("map"),
+        {
+            zoom:5,
+            center:{
+                lat:-2.5,
+                lng:118
+            }
+        }
+    );
+
+    const trafficLayer =
+        new google.maps.TrafficLayer();
+
+    trafficLayer.setMap(map);
+}
+
+function cariLokasi(){
+
+    if(navigator.geolocation){
+
+        navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            const lat =
+                position.coords.latitude;
+
+            const lng =
+                position.coords.longitude;
+
+            document.getElementById("lat")
+            .innerHTML =
+            lat.toFixed(6);
+
+            document.getElementById("lng")
+            .innerHTML =
+            lng.toFixed(6);
+
+            const posisi = {
+                lat:lat,
+                lng:lng
+            };
+
+            map.setCenter(posisi);
+
+            map.setZoom(15);
+
+            if(marker){
+                marker.setMap(null);
+            }
+
+            marker =
+            new google.maps.Marker({
+                position:posisi,
+                map:map,
+                title:"Lokasi Anda"
+            });
+
+        },
+
+        function(){
+            alert(
+            "Lokasi tidak dapat diakses");
+        });
+
+    }
+}
+
+</script>
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=API_KEY_KAMU&callback=initMap">
+</script>
 
 </body>
 </html>
+
+
