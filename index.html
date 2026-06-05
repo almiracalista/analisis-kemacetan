@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Monitoring Kemacetan Indonesia</title>
+<title>Monitoring Lalu Lintas Indonesia</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
 
@@ -12,15 +15,15 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Segoe UI, sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 body{
-    background:#f4f6f9;
+    background:#f4f4f4;
 }
 
 header{
-    background:#0d6efd;
+    background:#0077cc;
     color:white;
     text-align:center;
     padding:20px;
@@ -28,20 +31,21 @@ header{
 
 .container{
     display:flex;
-    flex-wrap:wrap;
+    height:calc(100vh - 80px);
 }
 
 .sidebar{
     width:320px;
     background:white;
     padding:20px;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
+    overflow-y:auto;
+    box-shadow:0 0 10px rgba(0,0,0,.1);
 }
 
 .card{
     background:#f8f9fa;
-    padding:15px;
     border-radius:10px;
+    padding:15px;
     margin-bottom:15px;
 }
 
@@ -49,35 +53,33 @@ header{
     margin-bottom:10px;
 }
 
-.status{
-    font-size:24px;
-    font-weight:bold;
-    color:red;
+.info p{
+    margin:5px 0;
 }
 
-#map{
-    flex:1;
-    height:90vh;
-}
-
-.info{
-    margin-top:10px;
-    line-height:1.8;
-}
-
-.btn{
+button{
     width:100%;
     padding:12px;
     border:none;
-    background:#0d6efd;
-    color:white;
     border-radius:8px;
+    background:#0077cc;
+    color:white;
     cursor:pointer;
     font-size:16px;
 }
 
-.btn:hover{
-    background:#0b5ed7;
+button:hover{
+    background:#005fa3;
+}
+
+.status{
+    font-size:20px;
+    font-weight:bold;
+    color:green;
+}
+
+#map{
+    flex:1;
 }
 
 </style>
@@ -86,8 +88,8 @@ header{
 <body>
 
 <header>
-    <h1>🚦 Monitoring Kemacetan Indonesia</h1>
-    <p>Google Maps Traffic Layer Realtime</p>
+    <h1>🚦 Monitoring Lalu Lintas Indonesia</h1>
+    <p>OpenStreetMap - Gratis Tanpa API Key</p>
 </header>
 
 <div class="container">
@@ -95,47 +97,39 @@ header{
 <div class="sidebar">
 
 <div class="card">
-<h3>Status Sistem</h3>
+    <h3>Status Sistem</h3>
+    <div class="status">ONLINE</div>
+</div>
 
-<p>Status:</p>
-<div class="status">AKTIF</div>
+<div class="card">
+    <h3>Lokasi Saya</h3>
+
+    <div class="info">
+
+        <p><b>Latitude:</b></p>
+        <p id="lat">-</p>
+
+        <br>
+
+        <p><b>Longitude:</b></p>
+        <p id="lng">-</p>
+
+    </div>
 
 </div>
 
 <div class="card">
 
-<h3>Lokasi Pengguna</h3>
+<h3>Informasi</h3>
 
-<div class="info">
-
-<p><b>Latitude:</b></p>
-<p id="lat">-</p>
-
-<p><b>Longitude:</b></p>
-<p id="lng">-</p>
+<p>📍 Menampilkan lokasi pengguna</p>
+<p>🗺️ Peta Indonesia realtime</p>
+<p>🌍 OpenStreetMap</p>
+<p>💯 Gratis tanpa API Key</p>
 
 </div>
 
-</div>
-
-<div class="card">
-
-<h3>Informasi Lalu Lintas</h3>
-
-<p>
-Warna pada peta:
-</p>
-
-<br>
-
-<p>🟢 Lancar</p>
-<p>🟠 Padat</p>
-<p>🔴 Macet</p>
-<p>🔴🔴 Sangat Macet</p>
-
-</div>
-
-<button class="btn" onclick="cariLokasi()">
+<button onclick="deteksiLokasi()">
 📍 Deteksi Lokasi Saya
 </button>
 
@@ -145,43 +139,44 @@ Warna pada peta:
 
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
 
-let map;
+const map = L.map('map').setView(
+[-2.5489,118.0149],
+5
+);
+
+L.tileLayer(
+'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+maxZoom:19
+}
+).addTo(map);
+
 let marker;
 
-function initMap(){
+function deteksiLokasi(){
 
-    map = new google.maps.Map(
-        document.getElementById("map"),
-        {
-            zoom:5,
-            center:{
-                lat:-2.5,
-                lng:118
-            }
-        }
-    );
+    if(!navigator.geolocation){
 
-    const trafficLayer =
-        new google.maps.TrafficLayer();
+        alert(
+        "Browser tidak mendukung GPS"
+        );
 
-    trafficLayer.setMap(map);
-}
+        return;
+    }
 
-function cariLokasi(){
+    navigator.geolocation.getCurrentPosition(
 
-    if(navigator.geolocation){
-
-        navigator.geolocation.getCurrentPosition(
-
-        function(position){
+        function(pos){
 
             const lat =
-                position.coords.latitude;
+            pos.coords.latitude;
 
             const lng =
-                position.coords.longitude;
+            pos.coords.longitude;
 
             document.getElementById("lat")
             .innerHTML =
@@ -191,43 +186,44 @@ function cariLokasi(){
             .innerHTML =
             lng.toFixed(6);
 
-            const posisi = {
-                lat:lat,
-                lng:lng
-            };
-
-            map.setCenter(posisi);
-
-            map.setZoom(15);
+            map.setView(
+            [lat,lng],
+            15
+            );
 
             if(marker){
-                marker.setMap(null);
+
+                map.removeLayer(
+                marker
+                );
+
             }
 
             marker =
-            new google.maps.Marker({
-                position:posisi,
-                map:map,
-                title:"Lokasi Anda"
-            });
+            L.marker(
+            [lat,lng]
+            )
+            .addTo(map)
+            .bindPopup(
+            "Lokasi Anda"
+            )
+            .openPopup();
 
         },
 
         function(){
-            alert(
-            "Lokasi tidak dapat diakses");
-        });
 
-    }
+            alert(
+            "Lokasi tidak dapat diakses"
+            );
+
+        }
+
+    );
+
 }
 
 </script>
 
-<script async defer
-src="https://maps.googleapis.com/maps/api/js?key=API_KEY_KAMU&callback=initMap">
-</script>
-
 </body>
 </html>
-
-
