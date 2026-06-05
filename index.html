@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Monitoring Lalu Lintas Indonesia</title>
+<title>Monitoring Kemacetan Indonesia</title>
 
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -15,7 +15,7 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:Segoe UI, sans-serif;
 }
 
 body{
@@ -35,17 +35,17 @@ header{
 }
 
 .sidebar{
-    width:320px;
+    width:350px;
     background:white;
     padding:20px;
     overflow-y:auto;
-    box-shadow:0 0 10px rgba(0,0,0,.1);
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
 .card{
     background:#f8f9fa;
-    border-radius:10px;
     padding:15px;
+    border-radius:10px;
     margin-bottom:15px;
 }
 
@@ -53,177 +53,5 @@ header{
     margin-bottom:10px;
 }
 
-.info p{
-    margin:5px 0;
-}
-
 button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background:#0077cc;
-    color:white;
-    cursor:pointer;
-    font-size:16px;
-}
-
-button:hover{
-    background:#005fa3;
-}
-
-.status{
-    font-size:20px;
-    font-weight:bold;
-    color:green;
-}
-
-#map{
-    flex:1;
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-    <h1>🚦 Monitoring Lalu Lintas Indonesia</h1>
-    <p>OpenStreetMap - Gratis Tanpa API Key</p>
-</header>
-
-<div class="container">
-
-<div class="sidebar">
-
-<div class="card">
-    <h3>Status Sistem</h3>
-    <div class="status">ONLINE</div>
-</div>
-
-<div class="card">
-    <h3>Lokasi Saya</h3>
-
-    <div class="info">
-
-        <p><b>Latitude:</b></p>
-        <p id="lat">-</p>
-
-        <br>
-
-        <p><b>Longitude:</b></p>
-        <p id="lng">-</p>
-
-    </div>
-
-</div>
-
-<div class="card">
-
-<h3>Informasi</h3>
-
-<p>📍 Menampilkan lokasi pengguna</p>
-<p>🗺️ Peta Indonesia realtime</p>
-<p>🌍 OpenStreetMap</p>
-<p>💯 Gratis tanpa API Key</p>
-
-</div>
-
-<button onclick="deteksiLokasi()">
-📍 Deteksi Lokasi Saya
-</button>
-
-</div>
-
-<div id="map"></div>
-
-</div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
-
-const map = L.map('map').setView(
-[-2.5489,118.0149],
-5
-);
-
-L.tileLayer(
-'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
-maxZoom:19
-}
-).addTo(map);
-
-let marker;
-
-function deteksiLokasi(){
-
-    if(!navigator.geolocation){
-
-        alert(
-        "Browser tidak mendukung GPS"
-        );
-
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-
-        function(pos){
-
-            const lat =
-            pos.coords.latitude;
-
-            const lng =
-            pos.coords.longitude;
-
-            document.getElementById("lat")
-            .innerHTML =
-            lat.toFixed(6);
-
-            document.getElementById("lng")
-            .innerHTML =
-            lng.toFixed(6);
-
-            map.setView(
-            [lat,lng],
-            15
-            );
-
-            if(marker){
-
-                map.removeLayer(
-                marker
-                );
-
-            }
-
-            marker =
-            L.marker(
-            [lat,lng]
-            )
-            .addTo(map)
-            .bindPopup(
-            "Lokasi Anda"
-            )
-            .openPopup();
-
-        },
-
-        function(){
-
-            alert(
-            "Lokasi tidak dapat diakses"
-            );
-
-        }
-
-    );
-
-}
-
-</script>
-
-</body>
-</html>
+    width:100
